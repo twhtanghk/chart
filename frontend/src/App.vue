@@ -6,29 +6,28 @@
 <script lang='coffee'>
 {Data} = require('./plugins/model.coffee').default
 Plotly = require 'plotly.js'
-debugger
+unpack = (rows, key) ->
+  rows.map (row) ->
+    row[key]
 
 export default
   name: 'App'
   mounted: ->
     {searchParams} = new URL window.location.href
     id = searchParams.get 'id'
+    data = await Data.list data: id: id
     trace =
-      date: []
-      close: []
-      open: []
-      low: []
-      high: []
+      x: unpack data, 'date'
+      close: unpack data, 'close'
+      open: unpack data, 'open'
+      low: unpack data, 'low'
+      high: unpack data, 'high'
       decreasing: line: color: 'red'
       increasing: line: color: 'green'
       line: color: 'rgba(31,119,180,1)'
       type: 'candlestick'
-      xaxis: 'date'
+      xaxis: 'x'
       yaxis: 'y'
-    (await Data.list data: id: id)
-      .map (row) ->
-        ['date', 'close', 'open', 'low', 'high'].map (field) ->
-          trace[field].push row[field]
     data = [trace]
     layout = 
       dragmode: 'zoom'
@@ -37,7 +36,10 @@ export default
         autorange: true
         domain: [0, 1]
         title: 'Date'
-        type: 'date'
+        type: 'category'
+        categoryorder: 'category ascending'
+        rangeslider:
+          visible: false
       yaxis:
         autorange: true
         domain: [0, 1]
