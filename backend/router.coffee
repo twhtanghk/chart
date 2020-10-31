@@ -10,9 +10,10 @@ module.exports = router
     if not id
       throw 'parameter id not defined'
     start = moment()
-      .subtract 90, 'days'
+      .subtract 180, 'days'
       .toDate()
     {error, currency, response} = await getHistoricalPrices start, new Date(), id, '1d'
     if error
       throw error
-    ctx.response.body = response
+    ctx.response.body = response.filter (row) ->
+      not row.type
