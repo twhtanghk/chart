@@ -5,6 +5,7 @@
 
 <script lang='coffee'>
 {Data} = require('./plugins/model.coffee').default
+sma = require 'sma'
 Plotly = require 'plotly.js'
 unpack = (rows, key) ->
   rows.map (row) ->
@@ -25,6 +26,14 @@ export default
       type: 'candlestick'
       xaxis: 'x'
       yaxis: 'y'
+    sma: (data, period, color) ->
+      values = unpack data, 'close'
+      x: unpack(data, 'date').slice 0, data.length - period + 1
+      y: sma values, period
+      line: {color}
+      type: 'line'
+      xaxis: 'x'
+      yaxis: 'y'
   mounted: ->
     {searchParams} = new URL window.location.href
     id = searchParams.get 'id'
@@ -43,7 +52,7 @@ export default
         autorange: true
         domain: [0, 1]
         type: 'linear'
-     Plotly.newPlot @$el, [@candle data], layout  
+     Plotly.newPlot @$el, [@candle(data), @sma(data, 20, 'red'), @sma(data, 60, 'blue')], layout  
 </script>
 
 <style>
