@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "sma, ema, and macd candlestick chart",
+  "main": "index.coffee",
+  "scripts": {
+    "start": "coffee index.coffee",
+    "test": "coffee test/index.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twhtanghk/chart.git"
+  },
+  "author": "Tommy Tang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/twhtanghk/chart/issues"
+  },
+  "homepage": "https://github.com/twhtanghk/chart#readme",
+  "dependencies": {
+    "coffeescript": "^2.5.1",
+    "koa": "^2.13.0",
+    "koa-404-handler": "0.0.2",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^9.4.0",
+    "yahoo-stock-api": "^1.0.5"
+  }
+}
