@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  chart:
+    image: twhtanghk/chart
+    ports:
+      - 3000
+    env_file:
+      ../.env
