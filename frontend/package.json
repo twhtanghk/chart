@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@vue/cli-plugin-pwa": "^4.5.8",
-    "chart.js": "git+https://github.com/chartjs/Chart.js.git",
     "coffee-loader": "^1.0.1",
     "coffeescript": "^2.5.1",
     "compression-webpack-plugin": "^6.0.4",
