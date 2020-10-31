@@ -12,11 +12,8 @@ unpack = (rows, key) ->
 
 export default
   name: 'App'
-  mounted: ->
-    {searchParams} = new URL window.location.href
-    id = searchParams.get 'id'
-    data = await Data.list data: id: id
-    trace =
+  methods:
+    candle: (data) ->
       x: unpack data, 'date'
       close: unpack data, 'close'
       open: unpack data, 'open'
@@ -28,14 +25,16 @@ export default
       type: 'candlestick'
       xaxis: 'x'
       yaxis: 'y'
-    data = [trace]
+  mounted: ->
+    {searchParams} = new URL window.location.href
+    id = searchParams.get 'id'
+    data = await Data.list data: id: id
     layout = 
       dragmode: 'zoom'
       showlegend: false
       xaxis:
         autorange: true
         domain: [0, 1]
-        title: 'Date'
         type: 'category'
         categoryorder: 'category ascending'
         rangeslider:
@@ -44,7 +43,7 @@ export default
         autorange: true
         domain: [0, 1]
         type: 'linear'
-     Plotly.newPlot @$el, data, layout  
+     Plotly.newPlot @$el, [@candle data], layout  
 </script>
 
 <style>
