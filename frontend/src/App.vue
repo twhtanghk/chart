@@ -5,7 +5,7 @@
 
 <script lang='coffee'>
 {Data} = require('./plugins/model.coffee').default
-sma = require 'sma'
+{SMA, EMA} = require 'technicalindicators'
 Plotly = require 'plotly.js'
 unpack = (rows, key) ->
   rows.map (row) ->
@@ -26,14 +26,15 @@ export default
       type: 'candlestick'
       xaxis: 'x'
       yaxis: 'y'
-    sma: (data, period, color) ->
+    ma: (data, period, {color, name}, calc) ->
       values = unpack data, 'close'
       x: unpack(data, 'date').slice 0, data.length - period + 1
-      y: sma values, period
+      y: calc {values, period}
       line: {color}
       type: 'line'
       xaxis: 'x'
       yaxis: 'y'
+      name: name
   mounted: ->
     {searchParams} = new URL window.location.href
     id = searchParams.get 'id'
@@ -52,7 +53,14 @@ export default
         autorange: true
         domain: [0, 1]
         type: 'linear'
-     Plotly.newPlot @$el, [@candle(data), @sma(data, 20, 'red'), @sma(data, 60, 'blue')], layout  
+    plots = [
+      @candle data
+      @ma data, 20, {color: 'red', name: 'sma 20'}, SMA.calculate
+      @ma data, 60, {color: 'orange', name: 'sma 60'}, SMA.calculate
+      @ma data, 20, {color: 'green', name: 'ema 20'}, EMA.calculate
+      @ma data, 60, {color: 'blue', name: 'ema 60'}, EMA.calculate
+    ]
+    Plotly.newPlot @$el, plots, layout
 </script>
 
 <style>
