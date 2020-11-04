@@ -1,10 +1,13 @@
 <template>
   <div class='container'>
+    <div ref='candle'/>
+    <price-div :data='data'/>
   </div>
 </template>
 
 <script lang='coffee'>
 {Data} = require('./plugins/model.coffee').default
+{ma} = require('./plugins/lib.coffee').default
 {SMA, EMA} = require 'technicalindicators'
 Plotly = require 'plotly.js'
 unpack = (rows, key) ->
@@ -13,6 +16,10 @@ unpack = (rows, key) ->
 
 export default
   name: 'App'
+  components:
+    priceDiv: require('./components/priceDiv').default
+  data: ->
+    data: null
   methods:
     candle: (data) ->
       x: unpack data, 'date'
@@ -38,7 +45,7 @@ export default
   mounted: ->
     {searchParams} = new URL window.location.href
     id = searchParams.get 'id'
-    data = await Data.list data: id: id
+    @data = await Data.list data: id: id
     layout = 
       dragmode: 'zoom'
       showlegend: false
@@ -54,13 +61,13 @@ export default
         domain: [0, 1]
         type: 'linear'
     plots = [
-      @candle data
-      @ma data, 20, {color: 'red', name: 'sma 20'}, SMA.calculate
-      @ma data, 60, {color: 'orange', name: 'sma 60'}, SMA.calculate
-      @ma data, 20, {color: 'green', name: 'ema 20'}, EMA.calculate
-      @ma data, 60, {color: 'blue', name: 'ema 60'}, EMA.calculate
+      @candle @data
+      @ma @data, 20, {color: 'red', name: 'sma 20'}, SMA.calculate
+      @ma @data, 60, {color: 'orange', name: 'sma 60'}, SMA.calculate
+      @ma @data, 20, {color: 'green', name: 'ema 20'}, EMA.calculate
+      @ma @data, 60, {color: 'blue', name: 'ema 60'}, EMA.calculate
     ]
-    Plotly.newPlot @$el, plots, layout
+    Plotly.newPlot @$refs.candle, plots, layout
 </script>
 
 <style>
