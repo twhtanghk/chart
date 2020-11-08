@@ -1,6 +1,5 @@
 <template>
-  <div class='container'>
-  </div>
+  <div/>
 </template>
 
 <script lang='coffee'>
@@ -49,10 +48,15 @@ export default
         @ma 20, {color: 'green', name: 'ema 20'}, EMA.calculate
         @ma 60, {color: 'blue', name: 'ema 60'}, EMA.calculate
       ].concat @priceDiv()
+    fetch: ->
+      {type, id} = @$route.params
+      switch type
+        when 'stock'
+          await Stock.list data: id: id
+        when 'cyptoCurr'
+          await CyptoCurr.list data: id: id
   mounted: ->
-    {searchParams} = new URL window.location.href
-    id = searchParams.get 'id'
-    @data = await Data.list data: id: id
+    @fetch()
   watch:
     data: ->
       layout =
