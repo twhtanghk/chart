@@ -19,6 +19,7 @@
   "homepage": "https://github.com/twhtanghk/chart#readme",
   "dependencies": {
     "coffeescript": "^2.5.1",
+    "coindesk.js": "^1.0.2",
     "koa": "^2.13.0",
     "koa-404-handler": "0.0.2",
     "koa-bodyparser": "^4.3.0",
