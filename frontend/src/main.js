@@ -1,5 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './plugins/router.coffee'
+import {createWebHashHistory, createRouter} from 'vue-router'
 
-createApp(App).use(router).mount('#app')
+var routes = [ {path: '/:type/:id', component: App} ]
+var router = createRouter({history: createWebHashHistory(), routes: routes})
+var app = createApp(App).use(router)
+router.isReady().then(() => app.mount('#app'))

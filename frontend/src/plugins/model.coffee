@@ -10,5 +10,5 @@ class Data extends Model
 export default
   Stock: new Data
     baseUrl: "#{process.env.API_URL}/stock"
-  CyptoCurr: new Data
-    baseUrl: "#{process.env.API_URL}/cyptoCurr"
+  CryptoCurr: new Data
+    baseUrl: "#{process.env.API_URL}/cryptoCurr"

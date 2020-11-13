@@ -3,7 +3,7 @@
 </template>
 
 <script lang='coffee'>
-{Data} = require('./plugins/model.coffee').default
+{Stock, CryptoCurr} = require('./plugins/model.coffee').default
 {SMA, EMA} = require 'technicalindicators'
 Plotly = require 'plotly.js'
 {unpack, priceDiv, ma} = require('./plugins/lib.coffee').default
@@ -52,12 +52,14 @@ export default
       {type, id} = @$route.params
       switch type
         when 'stock'
-          await Stock.list data: id: id
-        when 'cyptoCurr'
-          await CyptoCurr.list data: id: id
+          @data = await Stock.list data: id: id
+        when 'cryptoCurr'
+          @data = await CryptoCurr.list data: id: id
   mounted: ->
     @fetch()
   watch:
+    '$route': ->
+      @fetch()
     data: ->
       layout =
         showlegend: false
