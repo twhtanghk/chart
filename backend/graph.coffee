@@ -6,5 +6,18 @@ module.exports =
     query = "{tokens (first: 1, orderDirection: desc, orderBy: tradeVolume, where: {symbol: \"#{symbol}\"}) { id symbol name tradeVolume }}"
     (await needle 'post', url, {query}, json: true).body.data.tokens[0]
   ohlc: (id, days=365) ->
-    query = "{tokenDayDatas (first: #{days}, orderBy: date, orderDirection: desc, where:{token: \"#{id}\"}){ id date priceUSD dailyVolumeUSD token { id symbol } } }"
-    console.log (await needle 'post', url, {query}, json: true).body.data
+    query = "{tokenDayDatas (first: #{days}, orderBy: date, orderDirection: desc, where:{token: \"#{id}\"}){ id date priceUSD dailyVolumeUSD } }"
+    data = (await needle 'post', url, {query}, json: true)
+      .body.data.tokenDayDatas
+      .map ({date, dailyVolumeUSD, priceUSD}) ->
+        date = new Date date * 1000
+        {date, price: priceUSD, volume: dailyVolumeUSD}
+    curr = data[0]
+    data[1..].map ({date, price, volume}) ->
+      ret = 
+        date: curr.date
+        open: price
+        close: curr.price
+        volume: curr.volume
+      curr = {date, price, volume}
+      ret
