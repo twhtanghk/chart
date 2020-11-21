@@ -18,6 +18,8 @@ module.exports =
         date: curr.date
         open: price
         close: curr.price
+        high: Math.max price, curr.price
+        low: Math.min price, curr.price
         volume: curr.volume
       curr = {date, price, volume}
       ret
