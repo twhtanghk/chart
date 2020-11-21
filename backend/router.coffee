@@ -1,9 +1,9 @@
 Router = require 'koa-router'
 router = new Router()
 {getHistoricalPrices} = require 'yahoo-stock-api'
-{historical} = require 'coindesk.js'
 moment = require 'moment'
 serve = require 'koa-static'
+{token, ohlc} = require './graph.coffee'
 
 module.exports = router
   .get '/stock', (ctx, next) ->
@@ -19,13 +19,8 @@ module.exports = router
     ctx.response.body = response.filter (row) ->
       not row.type
   .get '/cryptoCurr', (ctx, next) ->
-    id = ctx.request.body.id
-    if not id
+    symbol = ctx.request.body.id
+    if not symbol
       throw 'parameter id not defined'
-    start = moment()
-      .subtract 365, 'days'
-      .toDate()
-    await historical
-      start: start
-      end: new Date()
-      currency: 'USD'
+    {id} = await token symbol
+    ctx.response.body = await ohlc id
