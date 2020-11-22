@@ -32,9 +32,9 @@ self =
           (ema['60'].y[i] - price) / close[i] * 100
     ]
     [
-      {x: x, y: diff[0]}
-      {x: x, y: diff[1]}
-      {x: x, y: diff[2]}
+      {x: x, y: diff[0], name: '(c - e20)/c', color: 'red'}
+      {x: x, y: diff[1], name: '(e20 - e60)/c', color: 'green'}
+      {x: x, y: diff[2], name: '(e60 - e120)/c', color: 'blue'}
     ]
 
 export default self

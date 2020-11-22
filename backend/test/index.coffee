@@ -1,8 +1,7 @@
 {getHistoricalPrices} = require 'yahoo-stock-api'
-
-get = (code) ->
-  data = await getHistoricalPrices new Date('01/01/2020'), new Date(), code, '1d'
-  console.log data
+{token, ohlc} = require '../graph.coffee'
 
 do ->
-  await get '0388.HK'
+  console.log await getHistoricalPrices new Date('01/01/2020'), new Date(), '0388.HK', '1d'
+  {id} = await token 'WETH'
+  console.log await ohlc id
