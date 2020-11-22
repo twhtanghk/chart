@@ -15,9 +15,11 @@ export default
   methods:
     priceDiv: ->
       priceDiv @data
-        .map ({x, y}) ->
+        .map ({x, y, name, color}) ->
           x: x
           y: y
+          name: name
+          line: {color}
           type: 'line'
           xaxis: 'x'
           yaxis: 'y2'
@@ -32,6 +34,7 @@ export default
       line: color: 'rgba(31,119,180,1)'
       type: 'candlestick'
       xaxis: 'x'
+      yaxis: 'y'
     ma: (period, {color, name}, calc) ->
       {x, y} = ma @data, period, calc
       x: x
@@ -39,15 +42,15 @@ export default
       line: {color}
       type: 'line'
       xaxis: 'x'
+      yaxis: 'y'
       name: name
     traces: ->
-      [
+      @priceDiv().concat [
         @market()
-        @ma 20, {color: 'red', name: 'sma 20'}, SMA.calculate
-        @ma 60, {color: 'orange', name: 'sma 60'}, SMA.calculate
-        @ma 20, {color: 'green', name: 'ema 20'}, EMA.calculate
-        @ma 60, {color: 'blue', name: 'ema 60'}, EMA.calculate
-      ].concat @priceDiv()
+        @ma 20, {color: 'red', name: 'ema 20'}, EMA.calculate
+        @ma 60, {color: 'green', name: 'ema 60'}, EMA.calculate
+        @ma 120, {color: 'blue', name: 'ema 120'}, EMA.calculate
+      ]
     fetch: ->
       {type, id} = @$route.params
       switch type
@@ -63,15 +66,20 @@ export default
     data: ->
       layout =
         showlegend: false
+        grid:
+          rows: 2
+          columns: 1
+          subplots: ['xy2', 'xy']
+          roworder: 'bottom to top'
         xaxis:
           type: 'category'
           categoryorder: 'category ascending'
           rangeslider:
             visible: false
+        yaxis:
+          domain: [0, 0.7]
         yaxis2:
-          overlaying: 'y'
-          side: 'right'
-          range: [-10, 50]
+          domain: [0.8, 1]
       if @data?
         Plotly.newPlot @$el, @traces(), layout
 </script>
