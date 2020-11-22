@@ -32,6 +32,7 @@ export default
       decreasing: line: color: 'red'
       increasing: line: color: 'green'
       line: color: 'rgba(31,119,180,1)'
+      name: 'ohlc'
       type: 'candlestick'
       xaxis: 'x'
       yaxis: 'y'
