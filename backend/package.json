@@ -4,8 +4,7 @@
   "description": "sma, ema, and macd candlestick chart",
   "main": "index.coffee",
   "scripts": {
-    "start": "coffee index.coffee",
-    "test": "coffee test/index.coffee"
+    "start": "coffee index.coffee"
   },
   "repository": {
     "type": "git",
