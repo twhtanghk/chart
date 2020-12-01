@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/twhtanghk/chart#readme",
   "dependencies": {
+    "analysis": "git+https://github.com/twhtanghk/analysis.git",
     "coffeescript": "^2.5.1",
     "koa": "^2.13.0",
     "koa-404-handler": "0.0.2",
