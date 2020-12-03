@@ -45,8 +45,23 @@ export default
       xaxis: 'x'
       yaxis: 'y'
       name: name
+    basePrice: (s=20, m=60, l=120) ->
+      x = unpack @data, 'date'
+      x = [x[s], x[m], x[l]]
+      y = unpack @data, 'low'
+      y = [y[s], y[m], y[l]]
+      x: x
+      y: y
+      name: 'base price'
+      mode: 'markers'
+      type: 'scatter'
+      marker:
+        size: 12
+        color: 'yellow'
     traces: ->
-      @priceDiv().concat [
+      ret = @priceDiv()
+      ret.push @basePrice()
+      ret.concat [
         @market()
         @ma 20, {color: 'red', name: 'ema 20'}, EMA.calculate
         @ma 60, {color: 'green', name: 'ema 60'}, EMA.calculate
