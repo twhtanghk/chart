@@ -19,6 +19,7 @@
   "dependencies": {
     "analysis": "git+https://github.com/twhtanghk/analysis.git",
     "coffeescript": "^2.5.1",
+    "config": "github:twhtanghk/config",
     "koa": "^2.13.0",
     "koa-404-handler": "0.0.2",
     "koa-bodyparser": "^4.3.0",
@@ -27,6 +28,7 @@
     "koa-router": "^9.4.0",
     "koa-static": "^5.0.0",
     "moment": "^2.29.1",
+    "mqtt": "^4.2.6",
     "needle": "^2.5.2",
     "yahoo-stock-api": "^1.0.5"
   }
