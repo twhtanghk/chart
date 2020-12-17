@@ -15,17 +15,20 @@ module.exports = bootstrap: ->
         switch action
           when 'subscribe'
             for code in data
-              if code not of global.config.stock
-                opts =
-                  json: true
-                  headers:
-                    'X-HTTP-Method-Override': 'GET'
-                global.config.stock[code] = await indicators code
-              message = JSON.stringify 
-                src: 'indicators'
-                symbol: code
-                indicators: global.config.stock[code]
-              client.publish 'stock/indicators', message
+              try
+                if code not of global.config.stock
+                  opts =
+                    json: true
+                    headers:
+                      'X-HTTP-Method-Override': 'GET'
+                  global.config.stock[code] = await indicators code
+                message = JSON.stringify 
+                  src: 'indicators'
+                  symbol: code
+                  indicators: global.config.stock[code]
+                client.publish 'stock/indicators', message
+              catch err
+                console.error "error to fetch #{code}"
           when 'unsubscribe'
             data.map (code) ->
               delete global.config.stock[code]
