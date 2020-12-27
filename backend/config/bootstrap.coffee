@@ -1,5 +1,4 @@
-_ = require 'lodash'
-{symbol, indicators} = require 'analysis'
+{symbol, indicators, ohlc} = require 'analysis'
 
 module.exports = bootstrap: ->
   client = require 'mqtt'
@@ -21,7 +20,7 @@ module.exports = bootstrap: ->
                     json: true
                     headers:
                       'X-HTTP-Method-Override': 'GET'
-                  global.config.stock[code] = await indicators code
+                  global.config.stock[code] = await indicators await ohlc.stock code
                 message = JSON.stringify 
                   src: 'indicators'
                   symbol: code
