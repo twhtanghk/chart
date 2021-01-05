@@ -1,8 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import candle from './candle.vue'
+import breadth from './breadth.vue'
 import {createWebHashHistory, createRouter} from 'vue-router'
 
-var routes = [ {path: '/:type/:id', component: App} ]
+var routes = [ 
+  { path: '/breadth', component: breadth },
+  { path: '/:type/:id', component: candle }
+]
 var router = createRouter({history: createWebHashHistory(), routes: routes})
-var app = createApp(App).use(router)
-router.isReady().then(() => app.mount('#app'))
+createApp(App).use(router).mount('#app')

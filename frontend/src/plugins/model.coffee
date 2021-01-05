@@ -7,8 +7,20 @@ class Data extends Model
       data.date = moment(new Date(data.date * 1000)).format 'YYYY-MM-DD'
     data
 
+class Breadth extends Model
+  format: (data) ->
+    {symbol, breadth} = data
+    ret = []
+    for date, percent of breadth
+      ret.push
+        date: new Date parseInt date
+        percent: percent
+    ret
+  
 export default
   Stock: new Data
     baseUrl: "#{process.env.API_URL}/stock"
   CryptoCurr: new Data
     baseUrl: "#{process.env.API_URL}/cryptoCurr"
+  Breadth: new Breadth
+    baseUrl: "#{process.env.API_URL}/breadth"

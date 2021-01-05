@@ -1,6 +1,6 @@
 Router = require 'koa-router'
 router = new Router()
-{ohlc, indicators} = require 'analysis'
+{ohlc, indicators, breadth} = require 'analysis'
 
 module.exports = router
   .get '/stock', (ctx, next) ->
@@ -18,3 +18,11 @@ module.exports = router
     if not id
       throw 'parameter id not defined'
     ctx.response.body = await indicators id
+  .get '/breadth', (ctx, next) ->
+    id = ctx.request.body.id
+    if not id
+      throw 'parameter id not defined'
+    ret = {}
+    for symbol in id
+      ret[symbol] = await breadth symbol
+    ctx.response.body = ret
