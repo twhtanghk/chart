@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/twhtanghk/chart#readme",
   "dependencies": {
-    "analysis": "git+https://github.com/twhtanghk/analysis.git",
     "coffeescript": "^2.5.1",
     "config": "github:twhtanghk/config",
     "koa": "^2.13.0",
@@ -30,6 +29,7 @@
     "moment": "^2.29.1",
     "mqtt": "^4.2.6",
     "needle": "^2.5.2",
+    "yahoo-stock": "git+https://github.com/twhtanghk/yahoo-stock.git",
     "yahoo-stock-api": "^1.0.5"
   }
 }

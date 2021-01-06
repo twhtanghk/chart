@@ -3,6 +3,7 @@
 </template>
 
 <script lang='coffee'>
+{Sector} = require 'yahoo-stock'
 {Breadth} = require('./plugins/model.coffee').default
 Plotly = require 'plotly.js'
 {unpack} = require('./plugins/lib.coffee').default
@@ -11,11 +12,9 @@ export default
   name: 'breadth'
   methods:
     heatmap: ->
-      id = process.env.PEERS
-        .split ','
-      console.log id
-      data = await Breadth.list data: id: id
-      console.log data
+      for name in Sector.list
+        name: name
+        breadth: await Breadth.list data: id: name
       layout =
         xaxis:
           type: 'category'

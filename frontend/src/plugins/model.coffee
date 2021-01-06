@@ -8,14 +8,6 @@ class Data extends Model
     data
 
 class Breadth extends Model
-  format: (data) ->
-    {symbol, breadth} = data
-    ret = []
-    for date, percent of breadth
-      ret.push
-        date: new Date parseInt date
-        percent: percent
-    ret
   
 export default
   Stock: new Data

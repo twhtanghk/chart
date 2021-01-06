@@ -1,6 +1,7 @@
 Router = require 'koa-router'
 router = new Router()
-{ohlc, indicators, breadth} = require 'analysis'
+{ohlc, indicators} = require 'analysis'
+{Sector} = require 'yahoo-stock'
 
 module.exports = router
   .get '/stock', (ctx, next) ->
@@ -22,7 +23,5 @@ module.exports = router
     id = ctx.request.body.id
     if not id
       throw 'parameter id not defined'
-    ret = {}
-    for symbol in id
-      ret[symbol] = await breadth symbol
-    ctx.response.body = ret
+    sector = new Sector await Sector.constituent id
+    ctx.response.body = await sector.breadth()
