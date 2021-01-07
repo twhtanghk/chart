@@ -4,8 +4,7 @@ bodyParser = require 'koa-bodyparser'
 methodOverride = require 'koa-methodoverride'
 serve = require 'koa-static'
 router = require './router'
-global.config = require('config')()
-global.config.bootstrap()
+global.config = require('config')().bootstrap()
 
 app = new Koa()
 app
