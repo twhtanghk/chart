@@ -7,9 +7,12 @@ module.exports =
       task: ->
         {stock, mqtt} = global.config
         for code, s of stock
-          mqtt.client.publish 'stock/yahoo', JSON.stringify
-            src: 'yahoo'
-            symbol: code
-            quote: await s.quote()
+          try
+            mqtt.client.publish 'stock/yahoo', JSON.stringify
+              src: 'yahoo'
+              symbol: code
+              quote: await s.quote()
+          catch err
+            console.error "error to get yahoo quote for #{code}"
     }
   ]
