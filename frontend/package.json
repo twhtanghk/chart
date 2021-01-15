@@ -16,7 +16,6 @@
     "core-js": "^3.6.5",
     "model": "git+https://github.com/twhtanghk/model.git",
     "moment": "^2.29.1",
-    "plotly.js": "^1.57.1",
     "technicalindicators": "^3.1.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-rc.2",

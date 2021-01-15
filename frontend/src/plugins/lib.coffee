@@ -9,7 +9,7 @@ self =
     x = self.unpack data,'date'
       .slice 0, data.length - period + 1
     y = calc {values, period}
-    {x, y}
+    {x: date, y: y[i]} for date, i in x
   priceDiv: (data) ->
     x = self.unpack data, 'date'
     close = self.unpack data, 'close'
