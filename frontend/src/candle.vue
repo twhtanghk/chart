@@ -10,6 +10,7 @@
 {SMA, EMA} = require 'technicalindicators'
 ApexCharts = require 'apexcharts'
 {unpack, priceDiv, ma} = require('./plugins/lib.coffee').default
+moment = require 'moment'
 
 export default
   name: 'App'
@@ -48,13 +49,19 @@ export default
               name: 'basePrice'
               type: 'scatter'
               data: [
-                {x: @data[20 - 1].date, y: @data[20 - 1].low}
-                {x: @data[60 - 1].date, y: @data[60 - 1].low}
-                {x: @data[120 - 1].date, y: @data[120 - 1].low}
+                {x: @data[20 - 1].date, y: @data[20 - 1].low, fillColor: 'yellow'}
+                {x: @data[60 - 1].date, y: @data[60 - 1].low, fillColor: 'yellow'}
+                {x: @data[120 - 1].date, y: @data[120 - 1].low, fillColor: 'yellow'}
               ]
             }
           ]
           @candle.updateOptions
+            xaxis:
+              type: 'datetime'
+              labels: 
+                format: 'yyyy-MM-dd'
+                formatter: (value, timestamp, opts) ->
+                  moment(timestamp).format 'YYYY-MM-DD'
             yaxis:
               decimalsInFloat: 2
               min: =>
@@ -65,16 +72,18 @@ export default
         when 'cryptoCurr'
           @data = await CryptoCUrr.list data: id: id
   mounted: ->
+    defaultTooltip = ({seriesIndex, dataPointIndex, w}) ->
+      w.globals.series[seriesIndex][dataPointIndex].toFixed 2
     @candle = new ApexCharts document.getElementById('candle'),
       chart:
         type: 'candlestick'
       dataLabels:
         enabled: false
       series: []
-      xaxis: type: 'category'
-      markers: colors: ['', 'red', 'green', 'blue', 'yellow']
-      fill: colors: ['', 'red', 'green', 'blue', 'yellow']
       colors: ['', 'red', 'green', 'blue', 'yellow']
+      markers: 
+        colors: ['', 'red', 'green', 'blue', 'yellow']
+        size: [0, 2, 2, 2, 6]
       tooltip:
         shared: true
         custom: [
@@ -84,12 +93,10 @@ export default
             l = w.globals.seriesCandleL[seriesIndex][dataPointIndex]
             c = w.globals.seriesCandleC[seriesIndex][dataPointIndex]
             "open: #{o.toFixed(2)}, high: #{h.toFixed(2)}, low: #{l.toFixed(2)}, close: #{c.toFixed(2)}"
-          ({seriesIndex, dataPointIndex, w}) ->
-            w.globals.series[seriesIndex][dataPointIndex]
-          ({seriesIndex, dataPointIndex, w}) ->
-            w.globals.series[seriesIndex][dataPointIndex]
-          ({seriesIndex, dataPointIndex, w}) ->
-            w.globals.series[seriesIndex][dataPointIndex]
+          defaultTooltip
+          defaultTooltip
+          defaultTooltip
+          defaultTooltip
         ]
       noData:
         text: 'Loading'

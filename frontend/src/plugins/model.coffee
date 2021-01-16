@@ -1,18 +1,9 @@
 {Model} = require('model').default
-moment = require 'moment'
 
-class Data extends Model
-  format: (data) ->
-    if data.date?
-      data.date = moment(new Date(data.date * 1000)).format 'YYYY-MM-DD'
-    data
-
-class Breadth extends Model
-  
 export default
-  Stock: new Data
+  Stock: new Model
     baseUrl: "#{process.env.API_URL}/stock"
-  CryptoCurr: new Data
+  CryptoCurr: new Model
     baseUrl: "#{process.env.API_URL}/cryptoCurr"
-  Breadth: new Breadth
+  Breadth: new Model
     baseUrl: "#{process.env.API_URL}/breadth"
