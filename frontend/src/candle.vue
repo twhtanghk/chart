@@ -26,7 +26,20 @@ export default
           @data = await Stock.list data: id: id
         when 'cryptoCurr'
           @data = await CryptoCurr.list data: id: id
-      series = [
+
+      @candle.updateOptions
+        xaxis:
+          type: 'datetime'
+          labels: 
+            formatter: (value, timestamp, opts) ->
+              moment(timestamp).format 'YYYY-MM-DD'
+        yaxis:
+          decimalsInFloat: 2
+          min: =>
+            Math.min ...(low for {low} in @data)
+          max: =>
+            Math.max ...(high for {high} in @data)
+      @candle.updateSeries [
         {
           name: 'candle'
           type: 'candlestick'
@@ -57,7 +70,9 @@ export default
           ]
         }
       ]
-      @candle.updateOptions
+
+      [c, ema20, ema60] = priceDiv @data
+      @priceDiv.updateOptions
         xaxis:
           type: 'datetime'
           labels: 
@@ -66,10 +81,26 @@ export default
         yaxis:
           decimalsInFloat: 2
           min: =>
-            Math.min ...(low for {low} in @data)
+            Math.min ...(y for {y} in c.concat ema20, ema60)
           max: =>
-            Math.max ...(high for {high} in @data)
-      @candle.updateSeries series
+            Math.max ...(y for {y} in c.concat ema20, ema60)
+      @priceDiv.updateSeries [
+        {
+          name: '(c - ema20)/c'
+          type: 'line'
+          data: c
+        }
+        {
+          name: '(ema20 - ema60)/c'
+          type: 'line'
+          data: ema20
+        }
+        {
+          name: '(ema60 - ema120)/c'
+          type: 'line'
+          data: ema60
+        }
+      ]
   mounted: ->
     tooltip =
       default: ({seriesIndex, dataPointIndex, w}) ->
@@ -83,6 +114,7 @@ export default
     @candle = new ApexCharts document.getElementById('candle'),
       chart:
         type: 'candlestick'
+        height: '400px'
       dataLabels:
         enabled: false
       series: []
@@ -105,6 +137,7 @@ export default
     @priceDiv = new ApexCharts document.getElementById('priceDiv'),
       chart:
         type: 'line'
+        height: '200px'
       dataLabels:
         enabled: false
       series: []
