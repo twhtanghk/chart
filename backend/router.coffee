@@ -8,12 +8,16 @@ module.exports = router
     id = ctx.request.body.id
     if not id
       throw 'parameter id not defined'
-    ctx.response.body = await ohlc.stock id
+    ctx.response.body = for row in await ohlc.stock id
+      row.date = row.date * 1000
+      row
   .get '/cryptoCurr', (ctx, next) ->
     id = ctx.request.body.id
     if not id
       throw 'parameter id not defined'
-    ctx.response.body = await ohlc.cryptoCurr id
+    ctx.response.body = for row in await ohlc.cryptoCurr id
+      row.date = row.date * 1000
+      row
   .get '/indicators', (ctx, next) ->
     id = ctx.request.body.id
     if not id
