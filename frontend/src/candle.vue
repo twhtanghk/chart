@@ -26,15 +26,21 @@ export default
           @data = await Stock.list data: id: id
         when 'cryptoCurr'
           @data = await CryptoCurr.list data: id: id
+      @updatePriceDiv()
+      @updateCandle()
 
+    updateCandle: ->
       @candle.updateOptions
         xaxis:
           type: 'datetime'
           labels: 
+            format: 'yyyy-MM-dd'
             formatter: (value, timestamp, opts) ->
-              moment(timestamp).format 'YYYY-MM-DD'
+              moment(value).format 'YYYY-MM-DD'
         yaxis:
           decimalsInFloat: 2
+          labels:
+            minWidth: 40
           min: =>
             Math.min ...(low for {low} in @data)
           max: =>
@@ -71,15 +77,21 @@ export default
         }
       ]
 
+    updatePriceDiv: ->
       [c, ema20, ema60] = priceDiv @data
+      xmin = Math.min ...(unpack @data, 'date')
       @priceDiv.updateOptions
         xaxis:
           type: 'datetime'
           labels: 
+            show: off
             formatter: (value, timestamp, opts) ->
-              moment(timestamp).format 'YYYY-MM-DD'
+              moment(value).format 'YYYY-MM-DD'
+          min: xmin
         yaxis:
           decimalsInFloat: 2
+          labels:
+            minWidth: 40
           min: =>
             Math.min ...(y for {y} in c.concat ema20, ema60)
           max: =>
@@ -123,7 +135,6 @@ export default
         colors: ['', 'red', 'green', 'blue', 'yellow']
         size: [0, 2, 2, 2, 6]
       tooltip:
-        shared: true
         custom: [
           tooltip.candle
           tooltip.default
