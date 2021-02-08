@@ -34,9 +34,11 @@ export default
         xaxis:
           type: 'datetime'
           labels: 
-            format: 'yyyy-MM-dd'
-            formatter: (value, timestamp, opts) ->
-              moment(value).format 'YYYY-MM-DD'
+            formatter: (value, timestamp, opts) =>
+              [first, ..., last] = @data
+              first = moment.unix first.date
+              last = moment.unix last.date
+              moment.unix(value).format if first.diff(last, 'days') < @data.length then 'YYYY-MM-DD HH:mm' else 'YYYY-MM-DD' 
         yaxis:
           decimalsInFloat: 2
           labels:
@@ -86,7 +88,7 @@ export default
           labels: 
             show: off
             formatter: (value, timestamp, opts) ->
-              moment(value).format 'YYYY-MM-DD'
+              moment.unix(value).format 'YYYY-MM-DD'
           min: xmin
         yaxis:
           decimalsInFloat: 2

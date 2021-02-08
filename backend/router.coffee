@@ -1,3 +1,6 @@
+moment = require 'moment'
+{PublicClient} = require 'coinbase-pro'
+client = new PublicClient()
 Router = require 'koa-router'
 router = new Router()
 {ohlc, indicators} = require 'analysis'
@@ -8,16 +11,17 @@ module.exports = router
     id = ctx.request.body.id
     if not id
       throw 'parameter id not defined'
-    ctx.response.body = for row in await ohlc.stock id
-      row.date = row.date * 1000
-      row
+    ctx.response.body = await ohlc.stock id
   .get '/cryptoCurr', (ctx, next) ->
     id = ctx.request.body.id
-    if not id
+    if not id?
       throw 'parameter id not defined'
-    ctx.response.body = for row in await ohlc.cryptoCurr id
-      row.date = row.date * 1000
-      row
+    ctx.response.body = for [time, low, high, open, close, volume] in await client.getProductHistoricRates id
+      date: time
+      low: low
+      high: high
+      open: open
+      close: close
   .get '/indicators', (ctx, next) ->
     id = ctx.request.body.id
     if not id
