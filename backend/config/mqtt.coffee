@@ -10,8 +10,12 @@ module.exports =
         clean: false 
       .on 'connect', ->
         @subscribe process.env.MQTTTOPIC, qos: 2
+      .on 'error', console.error
       .on 'message', (topic, msg) ->
-        {action, data} = JSON.parse msg.toString()
+        try
+          {action, data} = JSON.parse msg.toString()
+        catch err
+          console.error err
         {stock} = global.config
         if topic == 'stock'
           switch action

@@ -1,3 +1,4 @@
+_ = require 'lodash'
 moment = require 'moment'
 {PublicClient} = require 'coinbase-pro'
 client = new PublicClient()
@@ -13,10 +14,10 @@ module.exports = router
       throw 'parameter id not defined'
     ctx.response.body = await ohlc.stock id
   .get '/cryptoCurr', (ctx, next) ->
-    id = ctx.request.body.id
+    {id, granularity} = _.defaults ctx.request.body, granularity: 60
     if not id?
       throw 'parameter id not defined'
-    ctx.response.body = for [time, low, high, open, close, volume] in await client.getProductHistoricRates id
+    ctx.response.body = for [time, low, high, open, close, volume] in await client.getProductHistoricRates id, {granularity}
       date: time
       low: low
       high: high
