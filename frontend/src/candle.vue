@@ -20,12 +20,12 @@ export default
     priceDiv: null
   methods:
     fetch: ->
-      {type, id} = @$route.params
+      {type, id, granularity} = _.defaults @$route.params, granularity: "60"
       switch type
         when 'stock'
           @data = await Stock.list data: id: id
         when 'cryptoCurr'
-          @data = await CryptoCurr.list data: id: id
+          @data = await CryptoCurr.list data: {id, granularity}
       @updatePriceDiv()
       @updateCandle()
 

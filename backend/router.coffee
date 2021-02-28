@@ -14,9 +14,11 @@ module.exports = router
       throw 'parameter id not defined'
     ctx.response.body = await ohlc.stock id
   .get '/cryptoCurr', (ctx, next) ->
-    {id, granularity} = _.defaults ctx.request.body, granularity: 60
+    {id, granularity} = _.defaults ctx.request.body, granularity: "60"
     if not id?
       throw 'parameter id not defined'
+    if granularity not in ["60", "300", "900", "3600", "21600", "86400"]
+      throw 'invalid parameter granularity'
     ctx.response.body = for [time, low, high, open, close, volume] in await client.getProductHistoricRates id, {granularity}
       date: time
       low: low
