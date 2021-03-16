@@ -20,7 +20,9 @@ export default
     priceDiv: null
   methods:
     fetch: ->
-      {type, id, granularity} = _.defaults @$route.params, granularity: "60"
+      {type, id, granularity} = @$route.params
+      if granularity == ""
+        granularity = "60"
       switch type
         when 'stock'
           @data = await Stock.list data: id: id
