@@ -16,7 +16,7 @@ module.exports =
           {action, data} = JSON.parse msg.toString()
         catch err
           console.error err
-        {stock} = global.config
+        {stock, history} = global.config
         if topic == 'stock'
           switch action
             when 'subscribe'
@@ -24,11 +24,19 @@ module.exports =
                 try
                   if code not of stock
                     stock[code] = new Stock code
+                  ###
                   @publish 'stock/yahoo', JSON.stringify 
                     src: 'yahoo'
                     symbol: code
                     quote: await stock[code].quote()
-                    indicators: await stock[code].indicators()
+                  ###
+                  if code not of history
+                    history[code] =
+                      indicators: await stock[code].indicators()
+                  @publish 'stock/history', JSON.stringify
+                    src: 'yahoo'
+                    symbol: code
+                    history: history[code]
                 catch err
                   console.error "error to fetch #{code}"
             when 'unsubscribe'
