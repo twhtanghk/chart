@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/twhtanghk/chart#readme",
   "dependencies": {
-    "analysis": "git+https://github.com/twhtanghk/analysis.git",
     "coffeescript": "^2.5.1",
+    "coinbase-pro": "^0.9.0",
     "config": "github:twhtanghk/config",
     "koa": "^2.13.0",
     "koa-404-handler": "0.0.2",
@@ -27,9 +27,12 @@
     "koa-methodoverride": "^2.0.0",
     "koa-router": "^9.4.0",
     "koa-static": "^5.0.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mqtt": "^4.2.6",
     "needle": "^2.5.2",
-    "yahoo-stock-api": "^1.0.5"
+    "node-schedule": "^1.3.2",
+    "yahoo-stock": "git+https://github.com/twhtanghk/yahoo-stock.git",
+    "yahoo-stock-api": "github:twhtanghk/yahoo-stock-api"
   }
 }

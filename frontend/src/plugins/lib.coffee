@@ -9,7 +9,7 @@ self =
     x = self.unpack data,'date'
       .slice 0, data.length - period + 1
     y = calc {values, period}
-    {x, y}
+    {x: date, y: y[i]} for date, i in x
   priceDiv: (data) ->
     x = self.unpack data, 'date'
     close = self.unpack data, 'close'
@@ -17,24 +17,19 @@ self =
       20: self.ma data, 20, EMA.calculate
       60: self.ma data, 60, EMA.calculate
       120: self.ma data, 120, EMA.calculate
-    diff = [
-      ema['20']
-        .y
-        .map (price, i) ->
-          (close[i]- price) / close[i] * 100
-      ema['60']
-        .y
-        .map (price, i) ->
-          (ema['20'].y[i] - price) / close[i] * 100
-      ema['120']
-        .y
-        .map (price, i) ->
-          (ema['60'].y[i] - price) / close[i] * 100
-    ]
     [
-      {x: x, y: diff[0], name: '(c - e20)/c', color: 'red'}
-      {x: x, y: diff[1], name: '(e20 - e60)/c', color: 'green'}
-      {x: x, y: diff[2], name: '(e60 - e120)/c', color: 'blue'}
+      ema['20']
+        .map ({x, y}, i) ->
+          x: data[i].date
+          y: (data[i].close - y) / data[i].close * 100
+      ema['60']
+        .map ({x, y}, i) ->
+          x: data[i].date
+          y: (ema['20'][i].y - y) / data[i].close * 100
+      ema['120']
+        .map ({x, y}, i) ->
+          x: data[i].date
+          y: (ema['60'][i].y - y) / data[i].close * 100
     ]
 
 export default self

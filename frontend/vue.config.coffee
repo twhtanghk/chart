@@ -27,6 +27,7 @@ module.exports =
       process.env.API_URL = '.'
     config.plugins.push new EnvironmentPlugin [
       'API_URL'
+      'PEERS'
     ]
     config.module.rules.push
       test: /\.coffee$/
