@@ -1,5 +1,6 @@
 {connect} = require 'mqtt'
 {Stock} = require 'yahoo-stock'
+{ohlc, dataForgeIndicators} = require 'analysis'
 
 module.exports =
   mqtt:
@@ -24,15 +25,17 @@ module.exports =
                 try
                   if code not of stock
                     stock[code] = new Stock code
-                  ###
-                  @publish 'stock/yahoo', JSON.stringify 
-                    src: 'yahoo'
-                    symbol: code
-                    quote: await stock[code].quote()
-                  ###
                   if code not of history
+                    rows = await ohlc.stock code
+                    {validate, ema, rsi} = dataForgeIndicators
+                    rows = validate rows
+                    rows = ema rows
+                    rows = rsi rows
+                    {emaS, emaM, emaL, rsi} = rows.last()
                     history[code] =
                       indicators: await stock[code].indicators()
+                      ema: [emaS, emaM, emaL]
+                      rsi: rsi
                   @publish 'stock/history', JSON.stringify
                     src: 'yahoo'
                     symbol: code
