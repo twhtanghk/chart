@@ -39,7 +39,7 @@ module.exports =
                   @publish 'stock/analysis', JSON.stringify
                     src: 'yahoo'
                     symbol: code
-                    history: history[code]
+                    analysis: history[code]
                 catch err
                   console.error "error to fetch #{code}"
             when 'unsubscribe'
