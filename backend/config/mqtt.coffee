@@ -36,7 +36,7 @@ module.exports =
                       indicators: await stock[code].indicators()
                       ema: [emaS, emaM, emaL]
                       rsi: rsi
-                  @publish 'stock/history', JSON.stringify
+                  @publish 'stock/analysis', JSON.stringify
                     src: 'yahoo'
                     symbol: code
                     history: history[code]
